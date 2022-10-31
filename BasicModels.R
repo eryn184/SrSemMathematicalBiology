@@ -13,5 +13,5 @@ model1 <- function(r, t) {
   exp(r*t)
 }
 
-model1(r, 1988)
+
 
