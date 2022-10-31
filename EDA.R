@@ -3,7 +3,7 @@ library(growthcurver)
 
 
 
-v <- read_csv("Deer Data - Copy.csv")
+v <- read_csv("Deer Data (Update1).csv")
 gc_fit <- SummarizeGrowth(v$Year, v$`Deer Population`)
 plot(gc_fit)
 gc_fit$vals$r
