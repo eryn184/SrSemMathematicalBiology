@@ -15,3 +15,16 @@ model1 <- function(r, t) {
 
 
 
+#Model 2
+#dy/dt = r y(t) + b(t) y(t) 
+#b(t) = sin(t)
+#dy/dt = r y(t) + sin(t) y(t)
+
+dy.dt <- (.118849*y) - (sin(t)*y)
+
+
+euler(dy.dt=function(t,y){(.118849*y) - (sin(t)*y)}, .1, 253000)
+
+
+
+
