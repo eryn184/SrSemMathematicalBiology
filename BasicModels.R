@@ -1,6 +1,6 @@
 #Basic Models
 
-
+library(tidyverse)
 #Model 1
 #Start with the natural dynamics. The law of exponential evolution or Malthus law. 
 #We use r = .118849 based on file 'EDA.R' growth rate from first two data points (before carrying capacity is reached)
@@ -21,7 +21,10 @@ model1 <- function(r, t) {
 #dy/dt = r y(t) + sin(t) y(t)
 
 
-results <- euler(dy.dt=function(t,y){(.118849*y) - sin(y) + ((.118849/1100000)*y^2)}, .1, 253000, 0, 10)
+results <- euler(dy.dt=function(t,y){(.118849*y) - 0.03*(2-exp((-5*(sin(t/pi))^2)))*y + ((.118849/1100000)*y^2)}, .1, 253000, 0, 10)
+
+##results <- euler(dy.dt=function(t,y){(.118849*y) - exp(-5*sin(t))*y + ((.118849/1100000)*y^2)}, .1, 253000, 0, 10)
+
 
 results <- data.frame(results)
 
