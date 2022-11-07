@@ -20,18 +20,21 @@ model1 <- function(r, t) {
 #b(t) = sin(t)
 #dy/dt = r y(t) + sin(t) y(t)
 
+tnot =1972
+sean=tnot+4
+r=1.084164
 
-results <- euler(dy.dt=function(t,y){(.118849*y) - 0.03*(2-exp((-5*(sin(t/pi))^2)))*y + ((.118849/1100000)*y^2)}, .1, 253000, 0, 10)
+results <- euler(dy.dt=function(t,y){(r*y) - 0.03*(2-exp((-5*(sin(t*pi))^2)))*y - ((r/1100000)*y^2)}, .1, 253000, 0, sean)
 
 ##results <- euler(dy.dt=function(t,y){(.118849*y) - exp(-5*sin(t))*y + ((.118849/1100000)*y^2)}, .1, 253000, 0, 10)
 
 
 results <- data.frame(results)
 
-ggplot(results, mapping = aes(x = 1:101, y = results)) +
+ggplot(results, mapping = aes(x = 1:(sean*10 +1), y = results)) +
   geom_point()
 
-
+results
 
 #test
 
