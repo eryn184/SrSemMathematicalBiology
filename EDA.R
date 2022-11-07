@@ -20,3 +20,45 @@ growth_rate = v %>%
          Diff_growth = `Deer Population` - lag(`Deer Population`), # Difference in route between years
          Rate_percent = (Diff_growth / Diff_year)/lag(`Deer Population`) * 100) # growth rate in percent
 
+growth_rate2 = growth_rate %>%
+  # first sort by year
+  arrange(`Year`) %>%
+  mutate(Diff_growth_death = `Deer Harvest` - lag(`Deer Harvest`), # Difference in route between years
+         Rate_percent_death = ((Diff_growth_death / Diff_year)/lag(`Deer Harvest`) * 100), # growth rate in percent
+         Rate_percent_birth = (Rate_percent + Rate_percent_death)) 
+
+
+mean(growth_rate$Rate_percent, na.rm = TRUE)
+
+mean(growth_rate2$Rate_percent_death[2:8])
+
+## Basic Exponential Graph with the first population and the average growth rate per year from 1972-1982
+x <- c()
+
+for (i in 1:50) {
+  t = 25300*exp(0.113438735*i)
+  x[i] <- t
+}
+
+x
+plot(x)
+
+## Carrying Capacity
+
+l <- c()
+
+for(i in 1:15) {
+  l[i] <- 0.113438735*growth_rate$`Deer Population`[i] *(1-(growth_rate$`Deer Population`[i]/1100000))
+}
+
+plot(l)
+
+
+l2 <- c()
+
+for(i in 1:1000) {
+  p <- 1100000/(253000+3.347826087*exp((-0.113438735)*(1100000)*i))
+  l2[i] <- p
+}
+
+l2
