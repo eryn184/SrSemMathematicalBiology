@@ -21,10 +21,14 @@ model1 <- function(r, t) {
 #dy/dt = r y(t) + sin(t) y(t)
 
 tnot =1972
-sean=tnot+4
-r=1.084164
+sean=10
+##r=1.084164
 
-results <- euler(dy.dt=function(t,y){(r*y) - 0.03*(2-exp((-5*(sin(t*pi))^2)))*y - ((r/1100000)*y^2)}, .1, 253000, 0, sean)
+r=2.16
+
+
+
+results <- euler(dy.dt=function(t,y){(r*y) - 0.25*(exp((-2*(sin(t*pi))^2)))*y - ((r/1100000)*y^2)}, .1, 253000, 0, sean)
 
 ##results <- euler(dy.dt=function(t,y){(.118849*y) - exp(-5*sin(t))*y + ((.118849/1100000)*y^2)}, .1, 253000, 0, 10)
 
