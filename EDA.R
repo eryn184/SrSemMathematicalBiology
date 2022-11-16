@@ -1,5 +1,6 @@
 library(tidyverse)
 library(growthcurver)
+library(deSolve)
 
 
 
@@ -70,10 +71,7 @@ l2
 
 
 ## Lotka Volterra Model
-
-
-
-library(deSolve)
+ 
 
 # Example of Lotka Volterra model being used
 LotVmod <- function (Time, State, Pars) {
@@ -108,7 +106,6 @@ legend("topright", c("Cute bunnies", "Rabid foxes"), lty = c(1,2), col = c(1,2),
 
 
 PrPred <- function(a,b,g,d){
-  library(deSolve)
   
   Pars <- c(a, b, g, d)
   State <- c(x = 0.253, y = 0.2209)
@@ -125,12 +122,12 @@ PrPred <- function(a,b,g,d){
   Time <- seq(0, 100, by = 1)
   out <- as.data.frame(ode(func = LotVmod, y = State, parms = Pars, times = Time))
   
-  matplot(out[,-1], type = "l", xlab = "time ", ylab = "population")
-  legend("topright", c("Prey", "Predator"), lty = c(1,2), col = c(1,2), box.lwd = 0)
+  matplot(out[,-1], type = "l", xlab = "Time (Years) ", ylab = "Population (In millions)")
+  legend("topright", c("Deer", "Human"), lty = c(1,2), col = c(1,2), box.lwd = 0)
   
 }
 
-PrPred(0.11, 0.3, 0.1, 0.2)
+PrPred(0.11, 0.3, 0.13, 0.235)
 
 
 
