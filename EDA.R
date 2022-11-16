@@ -25,7 +25,9 @@ growth_rate2 = growth_rate %>%
   arrange(`Year`) %>%
   mutate(Diff_growth_death = `Deer Harvest` - lag(`Deer Harvest`), # Difference in route between years
          Rate_percent_death = ((Diff_growth_death / Diff_year)/lag(`Deer Harvest`) * 100), # growth rate in percent
-         Rate_percent_birth = (Rate_percent + Rate_percent_death)) 
+         Rate_percent_birth = (Rate_percent + Rate_percent_death), 
+         Harv_vs_Pop = (`Deer Harvest`/`Deer Population`)/Diff_year) # Difference in route between years
+
 
 
 mean(growth_rate$Rate_percent, na.rm = TRUE)
@@ -105,13 +107,11 @@ legend("topright", c("Cute bunnies", "Rabid foxes"), lty = c(1,2), col = c(1,2),
 
 
 
-
-
 PrPred <- function(a,b,g,d){
   library(deSolve)
   
   Pars <- c(a, b, g, d)
-  State <- c(x = 253000, y = 220900)
+  State <- c(x = 0.253, y = 0.2209)
   
   
   LotVmod <- function (Time, State, Pars) {
@@ -125,9 +125,58 @@ PrPred <- function(a,b,g,d){
   Time <- seq(0, 100, by = 1)
   out <- as.data.frame(ode(func = LotVmod, y = State, parms = Pars, times = Time))
   
-  matplot(out[,-1], type = "l", xlab = "time", ylab = "population")
+  matplot(out[,-1], type = "l", xlab = "time ", ylab = "population")
   legend("topright", c("Prey", "Predator"), lty = c(1,2), col = c(1,2), box.lwd = 0)
   
 }
 
-PrPred(1.1334, 0.1, .09, .15)
+PrPred(0.11, 0.3, 0.1, 0.2)
+
+
+
+
+
+
+PrPred(0.11, 0.05, .1, .25)
+
+
+
+
+
+# New method for lotka volterra model
+library(demodelr)
+
+## Example found online: 
+
+lynx_hare_eq <- c(
+  dHdt ~ r * H - b * H * L,
+  dLdt ~ e * b * H * L - d * L
+)
+
+
+# Define the parameters (as a named vector)
+lynx_hare_params <- c(r = 2, b = 0.5, e = 0.1, d = 1) # parameters: a named vector
+
+# Define the initial condition (as a named vector)
+lynx_hare_init <- c(H = 253, L = 220.9)
+
+# Define deltaT and the time steps:
+deltaT <- 0.005 # timestep length
+n_steps <- 50 # must be a number greater than 1
+
+# Compute the solution via Euler's method:
+out_solution <- euler(system_eq = lynx_hare_eq,
+                      parameters = lynx_hare_params,
+                      initial_condition = lynx_hare_init,
+                      deltaT = deltaT,
+                      n_steps = n_steps
+)
+
+# Make a plot of the solution, using different colors for lynx or hares.
+ggplot(data = out_solution) +
+  geom_line(aes(x = t, y = H), color = "red") +
+  geom_line(aes(x = t, y = L), color = "blue") +
+  labs(
+    x = "Time",
+    y = "Lynx (red) or Hares (blue)"
+  )
