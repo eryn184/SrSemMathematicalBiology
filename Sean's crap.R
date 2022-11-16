@@ -16,7 +16,8 @@ results
 
 b = 390700
 deerpop = 253000 ##1211000
-
+## b is the estimated harvest per year
+## results 2 is the carrying capacity model plus estimated harvest per year it is a little low 
 results_2<-euler(dy.dt=function(t,y){(r*y) - 0.18*(exp((-2*(sin(t*pi))^2)))*y -  ((r/1100000)*y^2)-(b)}, .1,deerpop , 0, sean)
 
 
