@@ -27,7 +27,7 @@ growth_rate2 = growth_rate %>%
   mutate(Diff_growth_death = `Deer Harvest` - lag(`Deer Harvest`), # Difference in route between years
          Rate_percent_death = ((Diff_growth_death / Diff_year)/lag(`Deer Harvest`) * 100), # growth rate in percent
          Rate_percent_birth = (Rate_percent + Rate_percent_death), 
-         Harv_vs_Pop = (`Deer Harvest`/`Deer Population`)/Diff_year) # Difference in route between years
+         Harv_vs_Pop = (`Deer Harvest`/`Deer Population`)) # Difference in route between years
 
 
 
@@ -98,11 +98,10 @@ matplot(out[,-1], type = "l", xlab = "time", ylab = "population")
 legend("topright", c("Cute bunnies", "Rabid foxes"), lty = c(1,2), col = c(1,2), box.lwd = 0)
 
 
+_________________________________________________________________________________________________________________________________________________________
 
 
-
-
-
+## Use this model for the paper
 
 
 PrPred <- function(a,b,g,d){
@@ -127,14 +126,20 @@ PrPred <- function(a,b,g,d){
   
 }
 
-PrPred(0.11, 0.3, 0.13, 0.235)
+PrPred(0.11, 0.3, 0.088, 0.15)
+
+## 0.11 is the initial growth rate from 1972 - 1982
+## 0.3 is the rate of which the the amount of deer is harvested each year.
+## 0.088 is the average death rate of human beings.
+## 0.15 is the rate in which predators increase by consuming prey. Estimate.
 
 
 
 
+_________________________________________________________________________________________________________________________________________________________________________
 
 
-PrPred(0.11, 0.05, .1, .25)
+
 
 
 
