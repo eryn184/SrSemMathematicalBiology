@@ -76,6 +76,7 @@ model2(1211000, 2000, .33, 390703.5)
 #An experimental model treating humans as a "predator" of deer
 # Main Code from https://www.r-bloggers.com/2010/03/lotka-volterra-model%C2%A0%C2%A0intro/. 
 # Then converted into a function
+## EXPERIMENTAL MODEL - ISOLATED ENVIRIONMENT
 
 
 PreyPred <- function(x_prey, y_pred, a, b, g, d){
