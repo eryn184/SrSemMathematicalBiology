@@ -104,10 +104,10 @@ ________________________________________________________________________________
 ## Use this model for the paper
 
 
-PrPred <- function(a,b,g,d){
+PreyPred <- function(x_prey, y_pred, a, b, g, d){
   
   Pars <- c(a, b, g, d)
-  State <- c(x = 0.253, y = 0.2209)
+  State <- c(x = x_prey, y = y_pred)
   
   
   LotVmod <- function (Time, State, Pars) {
@@ -126,10 +126,10 @@ PrPred <- function(a,b,g,d){
   
 }
 
-PrPred(0.11, 0.3, 0.088, 0.15)
+PreyPred(0.253, 0.2209, 0.11, 0.3, 0.088, 0.15)
 
 ## 0.11 is the initial growth rate from 1972 - 1982
-## 0.3 is the rate of which the the amount of deer is harvested each year.
+## 0.3 is the average rate of which the the amount of deer is harvested each year.
 ## 0.088 is the average death rate of human beings.
 ## 0.15 is the rate in which predators increase by consuming prey. Estimate.
 
