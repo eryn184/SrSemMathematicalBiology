@@ -10,8 +10,23 @@ library(tidyverse)
 r <- .118849
 
 model1 <- function(r, t) {
-  exp(r*t)
+  exp(r*(t-1972)) + 253000
 }
+
+t <- c(1972:2030)
+
+results <- model1(r, t)
+results <- data.frame(results)
+results <- results %>%
+  mutate(year = c(1972:2030))
+
+results %>%
+  ggplot(mapping = aes(x = year, y = results)) +
+  geom_point()+
+  geom_line() +
+  xlab("Year") +
+  ylab("Deer Population") +
+  theme_bw()
 
 
 
