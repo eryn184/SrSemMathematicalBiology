@@ -81,6 +81,3 @@ results$year <- 1972+(results$x-1)*0.1
 ggplot(results, aes(x= year, y = results)) +
   geom_point() 
 
-#Why isn't this working??
-ggplot(deer_data, aes(x=Year, y = `Deer Population`))
-  geom_point()
