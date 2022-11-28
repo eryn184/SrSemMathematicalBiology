@@ -89,10 +89,9 @@ Time <- seq(0, 100, by = 1)
 
 
 
-
-
-
 out <- as.data.frame(ode(func = LotVmod, y = State, parms = Pars, times = Time))
+
+  
 
 matplot(out[,-1], type = "l", xlab = "time", ylab = "population")
 legend("topright", c("Cute bunnies", "Rabid foxes"), lty = c(1,2), col = c(1,2), box.lwd = 0)
@@ -126,7 +125,7 @@ PreyPred <- function(x_prey, y_pred, a, b, g, d){
   
 }
 
-PreyPred(0.253, 0.2209, 0.11, 0.3, 0.088, 0.15)
+PreyPred(0.253, 0.2209, 0.11, 0.3, 0.0880, 0.15)
 
 ## 0.11 is the initial growth rate from 1972 - 1982
 ## 0.3 is the average rate of which the the amount of deer is harvested each year.

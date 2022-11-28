@@ -112,8 +112,13 @@ PreyPred <- function(x_prey, y_pred, a, b, g, d){
   Time <- seq(0, 100, by = 1)
   out <- as.data.frame(ode(func = LotVmod, y = State, parms = Pars, times = Time))
   
-  matplot(out[,-1], type = "l", xlab = "Time (Years) ", ylab = "Population (In millions)")
-  legend("topright", c("Deer", "Human"), lty = c(1,2), col = c(1,2), box.lwd = 0)
+  ggplot(out) + 
+    geom_line(aes(x=time, y = x, color ="Deer")) +
+    geom_line(aes(x=time, y = y, color = "Human")) +
+    xlab('Time (in Years)') +
+    ylab('Population (in millions)') +
+    ggtitle("Experimental Model of an Isolated Enviornment with Deer and Humans") + 
+    scale_color_manual(name = "Legend", values = c("Human" = "blue", "Deer" = "red"))
   
 }
 
