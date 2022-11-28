@@ -23,13 +23,10 @@ ggplot(all_harvest, aes(x = Season, y = `Total harvest`))+
   geom_line()
 
 #b(t)
-b <- function(t){0.18*(exp((-2*(sin(t*pi))^2)))}
-b_t <- data.frame(matrix(ncol = 2, nrow = 5001))
-colnames(b_t)<-c("t","y")
-b_t$t <- seq(0,5,by=.001)
-b_t$y <- b(b_t$t)
-ggplot(b_t, aes(x=t,y=y))+
-  geom_point()
+b <- function(t){0.18*(exp((-2*(sin(t*pi))^2)))} 
+ggplot(data.frame(x=seq(0,5,by=.001)), aes(x=x)) + 
+  stat_function(fun=b) +
+  labs(x="t", y="b(t)")
 
 #Sean's model graph
 sean = 10 
@@ -61,3 +58,68 @@ results$Year <- 1992+(results$x-1)*0.1
 
 ggplot(results, aes(x= Year, y = `Deer Population`)) +
   geom_point() 
+
+#Euler's method visualization
+#Graph of actual function
+x_2 = function(x){x^2}
+ggplot(data.frame(x=c(-10:10)), aes(x=x)) + 
+  stat_function(fun=x_2)
+
+#Modified (simplified) version of Nicole's function
+euler <- function(dy.dt=function(t){}, h, y0, start=0, end=1) {
+  nsteps <- (end-start)/h
+  ys <- numeric(nsteps+1)
+  ys[1] <- y0
+  for (i in 1:nsteps) {
+    t <- start + (i-1)*h
+    ys[i+1] <- ys[i] + h*dy.dt(t)
+  }
+  ys
+}
+
+dy_dx = function(x){2*x}
+
+#Eulers: Step size of 1
+results_1 <- euler(dy_dx, 1,100,-10,10)
+results_1 <- as.data.frame(results_1)
+colnames(results_1) <- "y"
+results_1$change_x <- 1:(20+1)
+results_1$x <- -10+(results_1$change_x-1)
+ggplot(results_1, aes(x=x, y=y)) +
+  geom_point()
+
+#Euler's: Step size of .1
+results_2 <- euler(dy_dx, .1,100,-10,10)
+results_2 <- as.data.frame(results_2)
+colnames(results_2) <- "y"
+results_2$change_x <- 1:(20*10+1)
+results_2$x <- -10+(results_2$change_x-1)*.1
+ggplot(results_2, aes(x=x, y=y)) +
+  geom_point()
+
+#Euler's: Step size of .01
+results_3 <- euler(dy_dx, .01,100,-10,10)
+results_3 <- as.data.frame(results_3)
+colnames(results_3) <- "y"
+results_3$change_x <- 1:(20*100+1)
+results_3$x <- -10+(results_3$change_x-1)*.01
+ggplot(results_3, aes(x=x, y=y)) +
+  geom_point()
+
+#Euler's: Step size of 2
+results_4 <- euler(dy_dx, 2,100,-10,10)
+results_4 <- as.data.frame(results_4)
+colnames(results_4) <- "y"
+results_4$change_x <- 1:(20/2+1)
+results_4$x <- -10+(results_4$change_x-1)*2
+ggplot(results_4, aes(x=x, y=y)) +
+  geom_point()
+
+#Euler's: Step size of 5
+results_5 <- euler(dy_dx, 5,100,-10,10)
+results_5 <- as.data.frame(results_5)
+colnames(results_5) <- "y"
+results_5$change_x <- 1:(20/5+1)
+results_5$x <- -10+(results_5$change_x-1)*5
+ggplot(results_5, aes(x=x, y=y)) +
+  geom_point()
