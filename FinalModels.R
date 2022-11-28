@@ -51,15 +51,29 @@ results %>%
 
 # Model 2- Natural Growth and Constant Harvest by Time --------------------
 #Model 2
-#dy/dt = r y(t) + b(t) y(t) 
+#dy/dt = r y(t) - B
+#y(t)=(y_0-B/r) e^(r(t-t_0))+B/r
 
+#r = .33 (adjusted r based on an isolated value of growth when accounting for harvest effects and starting at 1992)
 
 model2 <- function(y0, t, r, B) {
   (y0 - (B/r)) * exp(r*(t- 1992)) + (B/r)
 }
 
 
-model2(1211000, 2000, .33, 390703.5)
+t <- c(1992:2025)
+results <- model2(1211000, t, .33, 390703.5)
+results <- data.frame(results)
+results <- results %>%
+  mutate(year = c(1992:2025))
+
+results %>%
+  ggplot(mapping = aes(x = year, y = results)) +
+  geom_point()+
+  geom_line() +
+  xlab("Year") +
+  ylab("Deer Population") +
+  theme_bw()
 
 
 
@@ -67,6 +81,7 @@ model2(1211000, 2000, .33, 390703.5)
 # Model 3- Carrying Capacity,  Harvest,  Pop Growth -----------------------
 sean = 10 
 b = 390700
+r=2.16
 deerpop = 1211000 ##253000 
 ## b is the estimated harvest per year
 ## results 2 is the carrying capacity model plus estimated harvest per year it is a little low 
@@ -130,16 +145,19 @@ PreyPred(0.253, 0.2209, 0.11, 0.3, 0.088, 0.15)
 
 
 # EDA- Basic Graphs of the Data -------------------------------------------
+colors <- c("Deer Population" = "red", "Deer Harvest" = "blue", "Deer Hunters" = "orange")
 
 deer %>%
   ggplot(aes(x = Year)) +
-  geom_point(mapping = aes(y = Deer_Population)) +
-  geom_line(aes(y = Deer_Population)) +
-  geom_point(aes(y = Deer_Harvest), color = "red") +
-  geom_line(aes(y = Deer_Harvest), color = "red") +
-  geom_point(aes(y= Total_Deer_Hunters), color = "blue") +
-  geom_line(aes(y = Total_Deer_Hunters), color = "blue") +
+  geom_point(mapping = aes(y = Deer_Population, color = "Deer Population")) +
+  geom_line(aes(y = Deer_Population, color = "Deer Population")) +
+  geom_point(aes(y = Deer_Harvest, color = "Deer Harvest")) +
+  geom_line(aes(y = Deer_Harvest, color = "Deer Harvest")) +
+  geom_point(aes(y= Total_Deer_Hunters, color = "Deer Hunters")) +
+  geom_line(aes(y = Total_Deer_Hunters, color = "Deer Hunters")) +
   xlab("Year") +
   ylab("Deer Population")+
+  labs(color = "Key")+
+  scale_color_manual(values = colors)+
   theme_bw()
 

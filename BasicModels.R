@@ -64,3 +64,20 @@ ggplot(results, mapping = aes(x = 1:1001, y = results)) +
   geom_point()
 
 
+#Model based on logistic equation
+#dy/dt = r y(t) - r / K * y^2(t)
+
+years = 40
+b = 390700
+r=.33
+deerpop = 1211000
+
+results<-euler(dy.dt=function(t,y){(r*y) - ((r/1100000)*y^2)}, .1,deerpop , 0, years)
+
+results <- data.frame(results)
+results$x <- 1:(years*10+1)
+results$year <- 1972+(results$x-1)*0.1
+
+ggplot(results, aes(x= year, y = results)) +
+  geom_point() 
+
