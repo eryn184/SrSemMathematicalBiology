@@ -73,7 +73,7 @@ l2
 ## Lotka Volterra Model
  
 
-# Example of Lotka Volterra model being used
+# Example of Lotka Volterra model being used from https://www.r-bloggers.com/2010/03/lotka-volterra-model%C2%A0%C2%A0intro/.
 LotVmod <- function (Time, State, Pars) {
   with(as.list(c(State, Pars)), {
     dx = x*(alpha - beta*y)
@@ -95,48 +95,6 @@ out <- as.data.frame(ode(func = LotVmod, y = State, parms = Pars, times = Time))
 
 matplot(out[,-1], type = "l", xlab = "time", ylab = "population")
 legend("topright", c("Cute bunnies", "Rabid foxes"), lty = c(1,2), col = c(1,2), box.lwd = 0)
-
-
-_________________________________________________________________________________________________________________________________________________________
-
-
-## Use this model for the paper
-
-
-PreyPred <- function(x_prey, y_pred, a, b, g, d){
-  
-  Pars <- c(a, b, g, d)
-  State <- c(x = x_prey, y = y_pred)
-  
-  
-  LotVmod <- function (Time, State, Pars) {
-    with(as.list(c(State, Pars)), {
-      dx = x*(a - b*y)
-      dy = -y*(g - d*x)
-      return(list(c(dx, dy)))
-    })
-  }
-  
-  Time <- seq(0, 100, by = 1)
-  out <- as.data.frame(ode(func = LotVmod, y = State, parms = Pars, times = Time))
-  
-  matplot(out[,-1], type = "l", xlab = "Time (Years) ", ylab = "Population (In millions)")
-  legend("topright", c("Deer", "Human"), lty = c(1,2), col = c(1,2), box.lwd = 0)
-  
-}
-
-PreyPred(0.253, 0.2209, 0.11, 0.3, 0.0880, 0.15)
-
-## 0.11 is the initial growth rate from 1972 - 1982
-## 0.3 is the average rate of which the the amount of deer is harvested each year.
-## 0.088 is the average death rate of human beings.
-## 0.15 is the rate in which predators increase by consuming prey. Estimate.
-
-
-
-
-_________________________________________________________________________________________________________________________________________________________________________
-
 
 
 
@@ -181,3 +139,74 @@ ggplot(data = out_solution) +
     x = "Time",
     y = "Lynx (red) or Hares (blue)"
   )
+
+
+
+PreyPred <- function(x_prey, y_pred, a, b, g, d){
+  
+  Pars <- c(a, b, g, d)
+  State <- c(x = x_prey, y = y_pred)
+  
+  
+  LotkaVoltmodel <- function (Time, State, Pars) {
+    with(as.list(c(State, Pars)), {
+      dx = x*(a - b*y)
+      dy = -y*(g - d*x)
+      return(list(c(dx, dy)))
+    })
+  }
+  
+  Time <- seq(0, 100, by = 1)
+  out <- as.data.frame(ode(func = LotkaVoltmodel, y = State, parms = Pars, times = Time))
+  
+  matplot(out[,-1], type = "l", xlab = "Time (Years) ", ylab = "Population (In millions)")
+  legend("topright", c("Deer", "Human"), lty = c(1,2), col = c(1,2), box.lwd = 0)
+  
+}
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+## My code using: https://cran.r-project.org/web/packages/deSolve/vignettes/deSolve.pdf
+
+PreyPred <- function(x_prey, y_pred, a, b, g, d){
+  
+  Pars <- c(a, b, g, d)
+  Init_Conds <- c(x = x_prey, y = y_pred)
+  
+  
+  LotVmodel <- function (Time, Init_Conds, Pars) {
+    with(as.list(c(Init_Conds, Pars)), {
+      dX = x*(a - b*y)
+      dY = -y*(g - d*x)
+      return(list(c(dX, dY)))
+    })
+  }
+  
+  Time <- seq(0, 100, by = 1)
+  df <- as.data.frame(ode(func = LotVmodel, y = Init_Conds, parms = Pars, times = Time, method = "euler"))
+  
+  
+  ggplot(df) + 
+    geom_line(aes(x=time, y = x, color ="Deer")) +
+    geom_line(aes(x=time, y = y, color = "Human")) +
+    xlab('Time (in Years)') +
+    ylab('Population (in millions)') +
+    ggtitle("Experimental Model of an Isolated Enviornment with Deer and Humans") + 
+    scale_color_manual(name = "Legend", values = c("Human" = "blue", "Deer" = "red"))
+  
+}
+
+PreyPred(0.253, 0.2209, 0.11, 0.3, 0.0880, 0.15)
+
+## 0.11 is the initial growth rate from 1972 - 1982
+## 0.3 is the average rate of which the the amount of deer is harvested each year.
+## 0.088 is the average death rate of human beings.
+## 0.15 is the rate in which predators increase by consuming prey. Estimate.

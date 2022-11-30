@@ -105,7 +105,8 @@ ggplot(results_2, mapping = aes(x = 1:(sean*10 +1), y = results_2)) +
 
 # Lotka-Volterra Model ----------------------------------------------------
 #An experimental model treating humans as a "predator" of deer
-# Main Code from https://www.r-bloggers.com/2010/03/lotka-volterra-model%C2%A0%C2%A0intro/. 
+# Similar Code from https://www.r-bloggers.com/2010/03/lotka-volterra-model%C2%A0%C2%A0intro/.
+# Actual code written based off of: https://cran.r-project.org/web/packages/deSolve/vignettes/deSolve.pdf
 # Then converted into a function
 ## EXPERIMENTAL MODEL - ISOLATED ENVIRIONMENT
 
@@ -113,21 +114,22 @@ ggplot(results_2, mapping = aes(x = 1:(sean*10 +1), y = results_2)) +
 PreyPred <- function(x_prey, y_pred, a, b, g, d){
   
   Pars <- c(a, b, g, d)
-  State <- c(x = x_prey, y = y_pred)
+  Init_Conds <- c(x = x_prey, y = y_pred)
   
   
-  LotVmod <- function (Time, State, Pars) {
-    with(as.list(c(State, Pars)), {
-      dx = x*(a - b*y)
-      dy = -y*(g - d*x)
-      return(list(c(dx, dy)))
+  LotVmodel <- function (Time, Init_Conds, Pars) {
+    with(as.list(c(Init_Conds, Pars)), {
+      dX = x*(a - b*y)
+      dY = -y*(g - d*x)
+      return(list(c(dX, dY)))
     })
   }
   
   Time <- seq(0, 100, by = 1)
-  out <- as.data.frame(ode(func = LotVmod, y = State, parms = Pars, times = Time))
+  df <- as.data.frame(ode(func = LotVmodel, y = Init_Conds, parms = Pars, times = Time, method = "euler"))
   
-  ggplot(out) + 
+  
+  ggplot(df) + 
     geom_line(aes(x=time, y = x, color ="Deer")) +
     geom_line(aes(x=time, y = y, color = "Human")) +
     xlab('Time (in Years)') +
@@ -137,7 +139,13 @@ PreyPred <- function(x_prey, y_pred, a, b, g, d){
   
 }
 
+
 PreyPred(0.253, 0.2209, 0.11, 0.3, 0.088, 0.15)
+
+## 0.11 is the initial growth rate from 1972 - 1982
+## 0.3 is the average rate of which the the amount of deer is harvested each year.
+## 0.088 is the average death rate of human beings.
+## 0.15 is the rate in which predators increase by consuming prey. Estimate.
 
 
 
