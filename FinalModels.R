@@ -174,6 +174,9 @@ PreyPred(0.253, 0.2209, 0.11, 0.3, 0.088, 0.15)
 # EDA- Basic Graphs of the Data -------------------------------------------
 colors <- c("Deer Population" = "red", "Deer Harvest" = "blue", "Deer Hunters" = "orange")
 
+deer <- read_csv("Deer Data (Update1).csv")
+names(deer)<-str_replace_all(names(deer), c(" " = "_"))
+
 deer %>%
   ggplot(aes(x = Year)) +
   geom_point(mapping = aes(y = Deer_Population, color = "Deer Population")) +
