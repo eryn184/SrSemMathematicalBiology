@@ -79,6 +79,24 @@ euler <- function(dy.dt=function(t){}, h, y0, start=0, end=1) {
 
 dy_dx = function(x){2*x}
 
+#Euler's: Step size of 5
+results_5 <- euler(dy_dx, 5,100,-10,10)
+results_5 <- as.data.frame(results_5)
+colnames(results_5) <- "y"
+results_5$change_x <- 1:(20/5+1)
+results_5$x <- -10+(results_5$change_x-1)*5
+ggplot(results_5, aes(x=x, y=y)) +
+  geom_point()
+
+#Euler's: Step size of 2
+results_4 <- euler(dy_dx, 2,100,-10,10)
+results_4 <- as.data.frame(results_4)
+colnames(results_4) <- "y"
+results_4$change_x <- 1:(20/2+1)
+results_4$x <- -10+(results_4$change_x-1)*2
+ggplot(results_4, aes(x=x, y=y)) +
+  geom_point()
+
 #Eulers: Step size of 1
 results_1 <- euler(dy_dx, 1,100,-10,10)
 results_1 <- as.data.frame(results_1)
@@ -106,20 +124,6 @@ results_3$x <- -10+(results_3$change_x-1)*.01
 ggplot(results_3, aes(x=x, y=y)) +
   geom_point()
 
-#Euler's: Step size of 2
-results_4 <- euler(dy_dx, 2,100,-10,10)
-results_4 <- as.data.frame(results_4)
-colnames(results_4) <- "y"
-results_4$change_x <- 1:(20/2+1)
-results_4$x <- -10+(results_4$change_x-1)*2
-ggplot(results_4, aes(x=x, y=y)) +
-  geom_point()
 
-#Euler's: Step size of 5
-results_5 <- euler(dy_dx, 5,100,-10,10)
-results_5 <- as.data.frame(results_5)
-colnames(results_5) <- "y"
-results_5$change_x <- 1:(20/5+1)
-results_5$x <- -10+(results_5$change_x-1)*5
-ggplot(results_5, aes(x=x, y=y)) +
-  geom_point()
+
+

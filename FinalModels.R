@@ -44,6 +44,7 @@ results %>%
   geom_line() +
   xlab("Year") +
   ylab("Deer Population") +
+  ggtitle("Natural Population Growth")
   theme_bw()
 
 
@@ -73,6 +74,7 @@ results %>%
   geom_line() +
   xlab("Year") +
   ylab("Deer Population") +
+  ggtitle("Population Growth & Constant Harvest")
   theme_bw()
 
 
@@ -84,16 +86,19 @@ results %>%
 
 years = 30
 r=.33
-deerpop = 1211000
+deerpop = 253000 #1211000
 
 results<-euler(dy.dt=function(t,y){(r*y) - ((r/1100000)*y^2)}, .1,deerpop , 0, years)
 
 results <- data.frame(results)
 results$x <- 1:(years*10+1)
-results$year <- 1992+(results$x-1)*0.1
+results$year <- 1972+(results$x-1)*0.1
 
 ggplot(results, aes(x= year, y = results)) +
-  geom_point() 
+  geom_point() +
+  xlab("Year")+
+  ylab("Deer Population")+
+  ggtitle("Logistic Based Model with Carrying Capacity")
 
 
 
@@ -101,7 +106,7 @@ ggplot(results, aes(x= year, y = results)) +
 sean = 10 
 b = 390700
 r=2.16
-deerpop = 1211000 ##253000 
+deerpop = 253000#1211000 ##253000 
 ## b is the estimated harvest per year
 ## results 2 is the carrying capacity model plus estimated harvest per year it is a little low 
 ## Adjusted carrying capacity as it was being affected by the constant harvest 
@@ -195,27 +200,46 @@ deer %>%
 # Visualizations - model graphs -------------------------------------------
 
 # b(t)
-b <- function(t){0.18*(exp((-2*(sin(t*pi))^2)))} 
+b <- function(t){-0.18*(exp((-2*(sin(t*pi))^2)))} 
 ggplot(data.frame(x=seq(0,5,by=.001)), aes(x=x)) + 
   stat_function(fun=b) +
-  labs(x="t", y="b(t)")
+  labs(x="t", y="b(t)")+
+  ggtitle("Variation of Harvest")
 
 # Sean's model graph (cleaned)
 sean = 10 
 b = 390700
 r=2.16
-deerpop = 1211000
+deerpop = 253000 #1211000
 results_2<-euler(dy.dt=function(t,y){(r*y) - 0.18*(exp((-2*(sin(t*pi))^2)))*y -  ((r/(1100000+(b/1.4)))*y^2)-(b)}, .1,deerpop , 0, sean)
 
 results_2 <- data.frame(results_2)
 colnames(results_2) <- "Deer Population"
 results_2$x <- 1:(sean*10+1)
-results_2$Year <- 1992+(results_2$x-1)*0.1
+results_2$Year <- 1972+(results_2$x-1)*0.1
 
 ggplot(results_2, mapping = aes(x = Year, y = `Deer Population`)) +
   geom_point()+
-  geom_line()
+  geom_line()+
+  ggtitle("Population Growth, Harvest Function, \nand Carrying Capacity")
 
+#Sean's model without constant harvest
+tnot =1972
+sean=10
+
+r=2.16
+
+results <- euler(dy.dt=function(t,y){(r*y) - .18*(exp((-2*(sin(t*pi))^2)))*y - ((r/1100000)*y^2)}, .1, deerpop, 0, sean)
+results <- data.frame(results)
+
+colnames(results) <- "Deer Population"
+results$x <- 1:(sean*10+1)
+results$Year <- 1972+(results$x-1)
+
+ggplot(results, mapping = aes(x = Year, y = `Deer Population`)) +
+  geom_point()+
+  geom_line()+
+  ggtitle("Population Growth, Harvest Function, \nand Carrying Capacity")
 
 
 # Euler's Visualizations --------------------------------------------------
@@ -266,7 +290,8 @@ colnames(results_1) <- "y"
 results_1$change_x <- 1:(20+1)
 results_1$x <- -10+(results_1$change_x-1)
 ggplot(results_1, aes(x=x, y=y)) +
-  geom_point()
+  geom_point()+
+  ggtitle("Step size of 1")
 
 #Euler's: Step size of .1
 results_2 <- euler2(dy_dx, .1,100,-10,10)
@@ -275,7 +300,8 @@ colnames(results_2) <- "y"
 results_2$change_x <- 1:(20*10+1)
 results_2$x <- -10+(results_2$change_x-1)*.1
 ggplot(results_2, aes(x=x, y=y)) +
-  geom_point()
+  geom_point()+
+  ggtitle("Step size of 0.1")
 
 #Euler's: Step size of .01
 results_3 <- euler2(dy_dx, .01,100,-10,10)
@@ -284,5 +310,6 @@ colnames(results_3) <- "y"
 results_3$change_x <- 1:(20*100+1)
 results_3$x <- -10+(results_3$change_x-1)*.01
 ggplot(results_3, aes(x=x, y=y)) +
-  geom_point()
+  geom_point()+
+  ggtitle("Step size of 0.01")
 
